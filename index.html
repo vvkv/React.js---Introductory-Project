@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>ReactStrap</title>
+    <script src="https://unpkg.com/react@latest/dist/react.js"></script>
+    <script src="https://unpkg.com/react-dom@latest/dist/react-dom.js"></script>
+    <script src="https://unpkg.com/babel-standalone@6.15.0/babel.min.js"></script>
+    <link rel="stylesheet" href="css/bootstrap.css">
+    <link rel="stylesheet" href="css/style.css">
+  </head>
+  <body>
+    <div id="root"></div>
+    <script type="text/babel">
+    var Navbar = React.createClass({
+      change(page){
+      	this.props.change(page);
+
+      },
+
+      render(){
+        return(
+          <nav className="navbar navbar-default">
+            <div className="container">
+              <div className="navbar-header">
+                <a className="navbar-brand" href="#">{this.props.brand}</a>
+              </div>
+              <div id="navbar">
+                <ul className="nav navbar-nav">
+                  <li className={(this.props.currentPage === 'Home') ? 'active' : ''}><a onClick={this.change.bind(this, 'Home')} href="#">Home</a></li>
+                  <li className={(this.props.currentPage == 'About') ? 'active' : ''}><a onClick={this.change.bind(this, 'About')} href="#">About</a></li>
+                  <li className={(this.props.currentPage === 'Contact') ? 'active' : ''}><a onClick={this.change.bind(this, 'Contact')} href="#">Contact</a></li>
+                </ul>
+              </div>
+            </div>
+          </nav>
+        );
+      }  
+    });
+
+    var Jumbotron = React.createClass({
+      render(){
+        return(
+          <div>
+          <div className = "jumbotron">
+          	<div className = "container">
+          		<h1>{this.props.heading}</h1>
+          		<p className="lead">{this.props.text}</p>
+              <p><a className="btn btn-primary btn-lg" href="#" role="button">Learn more</a></p>
+          	</div>
+          </div>
+          </div>
+        );
+      }
+    });
+
+    var Page = React.createClass({
+      render(){
+      var pageContent;
+      if(this.props.currentPage == 'Home'){
+      	pageContent = 'This is the Home page';
+      } else if (this.props.currentPage == 'About') {
+      		pageContent = 'This is the About page';
+      } else if(this.props.currentPage == 'Contact'){
+      		pageContent = 'This is the Contact page';
+      } else{
+      		pageContent = 'This is the Home page';
+      }
+        return(
+          <div>
+            <div className = "container">
+            	<h2>{this.props.currentPage}</h2>
+            	{pageContent}
+            </div>
+          </div>
+        );
+      }
+    });
+
+
+    var Theme = React.createClass({
+    	
+    	handleChange(page){
+        //alert(page);
+        this.setState({currentPage:page});
+      },
+
+    	getInitialState(){
+    		return {
+    			currentPage: 'About'
+    		}
+    	},
+
+    	getDefaultProps(){
+    		return{
+    			brand: 'ReactStrap',
+    			heading: 'Hello, world!',
+    			text: 'This is a Bootstrap theme that uses React.js components'
+    		}
+    	},
+
+
+      render(){
+      	var jumbotron;
+        if(this.state.currentPage == 'Home'){
+          jumbotron = <Jumbotron heading={this.props.heading} text={this.props.text} />;
+        } else {
+          jumbotron = '';
+        }
+        return(
+          <div>
+            <Navbar currentPage = {this.state.currentPage} brand ={this.props.brand} change = {this.handleChange}/>
+            {jumbotron}
+            <Page currentPage = {this.state.currentPage}  />
+          </div>
+        );
+      }
+    });
+
+    ReactDOM.render(
+      <div>
+        <Theme />
+      </div>,
+      document.getElementById('root'));
+    </script>
+  </body>
+</html>
